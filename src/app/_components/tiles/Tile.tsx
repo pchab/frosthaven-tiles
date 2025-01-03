@@ -18,7 +18,7 @@ function drawCircleArea(hex: Hex, context: CanvasRenderingContext2D) {
 
 export default function TileComponent({ tile }: { tile: Tile }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [currentHex, setCurrentHex] = useState<Hex>();
+  const [currentHex, setCurrentHex] = useState<Hex>({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,7 +30,13 @@ export default function TileComponent({ tile }: { tile: Tile }) {
     drawCircleArea(currentHex, context);
   }, [currentHex]);
 
-  return <div className='relative'>
+  return <div
+    className='relative'
+    style={{
+      transform: `rotate(${tile.rotation}deg)`,
+      transformOrigin: 'center'
+    }}
+  >
     <canvas
       ref={canvasRef}
       className='absolute pointer-events-none'
@@ -54,5 +60,19 @@ export default function TileComponent({ tile }: { tile: Tile }) {
       width={tile.size.width}
       height={tile.size.height}
     />
+
+    <div className='flex flex-col gap-2'>
+      <h3 className='font-bold'>Position:</h3>
+      <input
+        className='p-4 bg-black'
+        id='x' name='x' type='number'
+        defaultValue={currentHex.x}
+        onChange={(e) => setCurrentHex({ ...currentHex, x: parseInt(e.target.value) })} />
+      <input
+        className='p-4 bg-black'
+        id='y' name='y' type='number'
+        defaultValue={currentHex.y}
+        onChange={(e) => setCurrentHex({ ...currentHex, y: parseInt(e.target.value) })} />
+    </div>
   </div>;
 }
