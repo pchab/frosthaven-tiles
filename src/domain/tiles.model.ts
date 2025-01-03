@@ -10,5 +10,5 @@ export interface Tile {
     width: number;
     height: number;
   };
-  hex: Hex[];
+  hexes: Hex[];
 }
