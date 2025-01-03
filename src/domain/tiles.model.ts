@@ -10,6 +10,7 @@ export interface Tile {
     width: number;
     height: number;
   };
+  padding: Hex;
   rotation?: number;
   hexes: Hex[];
 }

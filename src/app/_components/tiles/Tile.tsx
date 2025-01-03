@@ -5,6 +5,16 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 const RADIUS = 58;
+const HEX_WIDTH = 133; // adjusted based on your tile measurements
+const HEX_HEIGHT = 115;
+const ROW_OFFSET = HEX_WIDTH / 2;
+
+function getHexPixelPosition(hex: Hex, padding: { x: number, y: number }): { x: number, y: number } {
+  return {
+    x: padding.x + (hex.x * HEX_WIDTH) + (hex.y % 2 === 1 ? ROW_OFFSET : 0),
+    y: padding.y + (hex.y * HEX_HEIGHT)
+  };
+}
 
 function drawCircleArea(hex: Hex, context: CanvasRenderingContext2D) {
   const { x, y } = hex;
@@ -45,11 +55,12 @@ export default function TileComponent({ tile }: { tile: Tile }) {
     />
     <map name={tile.id}>
       {tile.hexes.map((hex, index) => {
+        const pixelPos = getHexPixelPosition(hex, tile.padding);
         return <area
           key={`${tile.id}-${index}`}
-          coords={`${hex.x},${hex.y},${RADIUS}`}
+          coords={`${pixelPos.x},${pixelPos.y},${RADIUS}`}
           shape='circle'
-          onMouseEnter={() => setCurrentHex(hex)}
+          onMouseEnter={() => setCurrentHex(pixelPos)}
         />;
       })}
     </map>
@@ -60,19 +71,5 @@ export default function TileComponent({ tile }: { tile: Tile }) {
       width={tile.size.width}
       height={tile.size.height}
     />
-
-    <div className='flex flex-col gap-2'>
-      <h3 className='font-bold'>Position:</h3>
-      <input
-        className='p-4 bg-black'
-        id='x' name='x' type='number'
-        defaultValue={currentHex.x}
-        onChange={(e) => setCurrentHex({ ...currentHex, x: parseInt(e.target.value) })} />
-      <input
-        className='p-4 bg-black'
-        id='y' name='y' type='number'
-        defaultValue={currentHex.y}
-        onChange={(e) => setCurrentHex({ ...currentHex, y: parseInt(e.target.value) })} />
-    </div>
   </div>;
 }

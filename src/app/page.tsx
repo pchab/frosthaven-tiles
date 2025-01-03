@@ -8,6 +8,6 @@ export default function MainPage() {
     <Image role='banner' priority loading='eager' src='/fh-frosthaven-logo.webp' alt='Frosthaven logo' width={600} height={87} />
     <Heading title='Select a scenario' />
 
-    <TileComponent tile={allTiles[1]} />
+    <TileComponent tile={allTiles[0]} />
   </div>;
 }
