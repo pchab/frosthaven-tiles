@@ -10,6 +10,74 @@ interface BoardProps {
 	onUpdateBoard: (newState: BoardState) => void;
 }
 
+const DEFAULT_HEX_WIDTH = 133;
+const SNAP_THRESHOLD = 50; // pixels
+
+// Helper to calculate pixel position of a hex (matching TileEditor logic)
+function getHexPixel(
+	hx: number,
+	hy: number,
+	hexWidth: number,
+	padding: { x: number; y: number },
+): { x: number; y: number } {
+	const hexHeight = hexWidth * (2 / Math.sqrt(3));
+	return {
+		x: padding.x + hexWidth * (hx + 0.5 * (hy % 2)),
+		y: padding.y + hexHeight * 0.75 * hy,
+	};
+}
+
+// Rotate a point around a center
+function rotatePoint(
+	point: { x: number; y: number },
+	center: { x: number; y: number },
+	angleDegrees: number,
+): { x: number; y: number } {
+	const rad = (angleDegrees * Math.PI) / 180;
+	const cos = Math.cos(rad);
+	const sin = Math.sin(rad);
+	const dx = point.x - center.x;
+	const dy = point.y - center.y;
+	return {
+		x: center.x + dx * cos - dy * sin,
+		y: center.y + dx * sin + dy * cos,
+	};
+}
+
+// Get all door positions for a placed tile in absolute pixel coordinates
+function getDoorPositions(
+	placedTile: PlacedTile,
+	tileDef: {
+		doors?: { x: number; y: number }[];
+		size: { width: number; height: number };
+		padding: { x: number; y: number };
+		debugScale?: { width: number };
+	},
+): { x: number; y: number }[] {
+	if (!tileDef.doors || tileDef.doors.length === 0) return [];
+
+	const hexWidth = tileDef.debugScale?.width || DEFAULT_HEX_WIDTH;
+	const tileCenter = {
+		x: tileDef.size.width / 2,
+		y: tileDef.size.height / 2,
+	};
+
+	return tileDef.doors.map((door) => {
+		// Get hex position relative to tile
+		const localPos = getHexPixel(door.x, door.y, hexWidth, tileDef.padding);
+
+		// Apply rotation around tile center
+		const rotatedPos = rotatePoint(localPos, tileCenter, placedTile.rotation);
+
+		// Convert to absolute board coordinates
+		return {
+			x: placedTile.x + rotatedPos.x,
+			y: placedTile.y + rotatedPos.y,
+		};
+	});
+}
+
+
 export function Board({ boardState, onUpdateBoard }: BoardProps) {
 	const [draggingId, setDraggingId] = useState<string | null>(null);
 	const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -57,7 +125,72 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 	};
 
 	const handleMouseUp = () => {
+		if (draggingId) {
+			// Check if we're dragging a tile and apply door snapping
+			const draggedTile = boardState.tiles.find((t) => t.id === draggingId);
+			if (draggedTile) {
+				const tileDef = allTiles.find((t) => t.id === draggedTile.tileId);
+				if (tileDef) {
+					const snappedPosition = findNearestDoorSnap(draggedTile, tileDef);
+					if (snappedPosition) {
+						const updatedTiles = boardState.tiles.map((tile) =>
+							tile.id === draggingId
+								? { ...tile, x: snappedPosition.x, y: snappedPosition.y }
+								: tile,
+						);
+						onUpdateBoard({ ...boardState, tiles: updatedTiles });
+						setDraggingId(null);
+						return;
+					}
+				}
+			}
+		}
 		setDraggingId(null);
+	};
+
+	// Find the nearest door to snap to
+	const findNearestDoorSnap = (
+		tile: PlacedTile,
+		tileDef: {
+			doors?: { x: number; y: number }[];
+			size: { width: number; height: number };
+			padding: { x: number; y: number };
+			debugScale?: { width: number };
+		},
+	): { x: number; y: number } | null => {
+		const tileDoors = getDoorPositions(tile, tileDef);
+		if (tileDoors.length === 0) return null;
+
+		let bestSnap: { x: number; y: number } | null = null;
+		let bestDistance = SNAP_THRESHOLD;
+
+		for (const existingTile of boardState.tiles) {
+			if (existingTile.id === tile.id) continue;
+
+			const existingDef = allTiles.find((t) => t.id === existingTile.tileId);
+			if (!existingDef) continue;
+
+			const existingDoors = getDoorPositions(existingTile, existingDef);
+
+			for (const door1 of tileDoors) {
+				for (const door2 of existingDoors) {
+					const distance = Math.hypot(door1.x - door2.x, door1.y - door2.y);
+
+					if (distance < bestDistance) {
+						bestDistance = distance;
+						// Calculate offset needed to align doors
+						const offsetX = door2.x - door1.x;
+						const offsetY = door2.y - door1.y;
+						bestSnap = {
+							x: tile.x + offsetX,
+							y: tile.y + offsetY,
+						};
+					}
+				}
+			}
+		}
+
+		return bestSnap;
 	};
 
 	const handleDrop = (e: React.DragEvent) => {
