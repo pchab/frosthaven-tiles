@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { saveTile } from "../../actions";
 import type { Tile, Hex } from "../../../domain/tiles.model";
 
+const DEFAULT_HEX_WIDTH = 133;
+
 interface TileEditorProps {
 	tile: Tile;
 }
@@ -12,7 +14,7 @@ export function TileEditor({ tile }: TileEditorProps) {
 	const [padding, setPadding] = useState(tile.padding);
 	const [hexes, setHexes] = useState<Hex[]>(tile.hexes);
 	const [doors, setDoors] = useState<Hex[]>(tile.doors || []);
-	const [hexWidth, setHexWidth] = useState(tile.debugScale?.width || 64); // Default width or saved width
+	const [hexWidth, setHexWidth] = useState(tile.debugScale?.width || DEFAULT_HEX_WIDTH); // Default width or saved width
 	const [editMode, setEditMode] = useState<"hexes" | "doors">("hexes");
 
 	// For pointy-topped hexes:
@@ -26,7 +28,7 @@ export function TileEditor({ tile }: TileEditorProps) {
 		setPadding(tile.padding);
 		setHexes(tile.hexes);
 		setDoors(tile.doors || []);
-		setHexWidth(tile.debugScale?.width || 64);
+		setHexWidth(tile.debugScale?.width || DEFAULT_HEX_WIDTH);
 	}, [tile]);
 
 	const handlePaddingChange = (axis: "x" | "y", value: number) => {

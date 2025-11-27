@@ -75,6 +75,491 @@
     }
   },
   {
+    "id": "1B",
+    "path": "/tiles/fh-01b-metal.webp",
+    "size": {
+      "width": 717,
+      "height": 398
+    },
+    "padding": {
+      "x": -94.5,
+      "y": -63
+    },
+    "hexes": [
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 2
+      }
+    ],
+    "doors": [
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 5,
+        "y": 1
+      }
+    ],
+    "debugScale": {
+      "width": 133
+    }
+  },
+  {
+    "id": "1C",
+    "path": "/tiles/fh-01c-snow.webp",
+    "size": {
+      "width": 717,
+      "height": 398
+    },
+    "padding": {
+      "x": -120,
+      "y": -63
+    },
+    "hexes": [
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 2,
+        "y": 0
+      },
+      {
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x": 5,
+        "y": 2
+      }
+    ],
+    "doors": [
+      {
+        "x": 2,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 1
+      }
+    ],
+    "debugScale": {
+      "width": 133
+    }
+  },
+  {
+    "id": "1D",
+    "path": "/tiles/fh-01d-metal.webp",
+    "size": {
+      "width": 717,
+      "height": 398
+    },
+    "padding": {
+      "x": -94,
+      "y": -65
+    },
+    "hexes": [
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 2
+      }
+    ],
+    "doors": [
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 5,
+        "y": 1
+      }
+    ],
+    "debugScale": {
+      "width": 133
+    }
+  },
+  {
+    "id": "1E",
+    "path": "/tiles/fh-01e-snow.webp",
+    "size": {
+      "width": 717,
+      "height": 398
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "1F",
+    "path": "/tiles/fh-01f-cave.webp",
+    "size": {
+      "width": 717,
+      "height": 398
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "1G",
+    "path": "/tiles/fh-01g-snow.webp",
+    "size": {
+      "width": 716,
+      "height": 398
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "1H",
+    "path": "/tiles/fh-01h-dungeon.webp",
+    "size": {
+      "width": 717,
+      "height": 398
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2A",
+    "path": "/tiles/fh-02a-dungeon.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2B",
+    "path": "/tiles/fh-02b-wood.webp",
+    "size": {
+      "width": 584,
+      "height": 627
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2C",
+    "path": "/tiles/fh-02c-dungeon.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2D",
+    "path": "/tiles/fh-02d-wood.webp",
+    "size": {
+      "width": 584,
+      "height": 627
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2E",
+    "path": "/tiles/fh-02e-snow.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2F",
+    "path": "/tiles/fh-02f-metal.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2G",
+    "path": "/tiles/fh-02g-snow.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2H",
+    "path": "/tiles/fh-02h-metal.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2I",
+    "path": "/tiles/fh-02i-dungeon.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2J",
+    "path": "/tiles/fh-02j-cave.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2K",
+    "path": "/tiles/fh-02k-dungeon.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "2L",
+    "path": "/tiles/fh-02l-cave.webp",
+    "size": {
+      "width": 584,
+      "height": 628
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
     "id": "3A",
     "path": "/tiles/fh-03a-cave.webp",
     "size": {
@@ -216,5 +701,775 @@
     "debugScale": {
       "width": 133
     }
+  },
+  {
+    "id": "3B",
+    "path": "/tiles/fh-03b-metal.webp",
+    "size": {
+      "width": 960,
+      "height": 717
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "3C",
+    "path": "/tiles/fh-03c-dungeon.webp",
+    "size": {
+      "width": 0,
+      "height": 0
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "3D",
+    "path": "/tiles/fh-03d-snow.webp",
+    "size": {
+      "width": 960,
+      "height": 717
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "4A",
+    "path": "/tiles/fh-04a-cave.webp",
+    "size": {
+      "width": 870,
+      "height": 765
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "4B",
+    "path": "/tiles/fh-04b-metal.webp",
+    "size": {
+      "width": 870,
+      "height": 765
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "4C",
+    "path": "/tiles/fh-04c-snow.webp",
+    "size": {
+      "width": 870,
+      "height": 765
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "4D",
+    "path": "/tiles/fh-04d-dungeon.webp",
+    "size": {
+      "width": 870,
+      "height": 765
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "5A",
+    "path": "/tiles/fh-05a-cave.webp",
+    "size": {
+      "width": 717,
+      "height": 717
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "5B",
+    "path": "/tiles/fh-05b-snow.webp",
+    "size": {
+      "width": 717,
+      "height": 717
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "6A",
+    "path": "/tiles/fh-06a-snow.webp",
+    "size": {
+      "width": 451,
+      "height": 1176
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "6B",
+    "path": "/tiles/fh-06b-metal.webp",
+    "size": {
+      "width": 452,
+      "height": 1176
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7A",
+    "path": "/tiles/fh-07a-cave.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7B",
+    "path": "/tiles/fh-07b-snow.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7C",
+    "path": "/tiles/fh-07c-cave.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7D",
+    "path": "/tiles/fh-07d-snow.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7E",
+    "path": "/tiles/fh-07e-dungeon.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7F",
+    "path": "/tiles/fh-07f-metal.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7G",
+    "path": "/tiles/fh-07g-wood.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "7H",
+    "path": "/tiles/fh-07h-metal.webp",
+    "size": {
+      "width": 1114,
+      "height": 513
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "8A",
+    "path": "/tiles/fh-08a-metal.webp",
+    "size": {
+      "width": 961,
+      "height": 743
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "8B",
+    "path": "/tiles/fh-08b-cave.webp",
+    "size": {
+      "width": 961,
+      "height": 742
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "9A",
+    "path": "/tiles/fh-09a-snow.webp",
+    "size": {
+      "width": 981,
+      "height": 971
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "9B",
+    "path": "/tiles/fh-09b-dungeon.webp",
+    "size": {
+      "width": 981,
+      "height": 972
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "9C",
+    "path": "/tiles/fh-09c-metal.webp",
+    "size": {
+      "width": 981,
+      "height": 972
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "9D",
+    "path": "/tiles/fh-09d-wood.webp",
+    "size": {
+      "width": 981,
+      "height": 972
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "10A",
+    "path": "/tiles/fh-10a-metal.webp",
+    "size": {
+      "width": 849,
+      "height": 743
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "10B",
+    "path": "/tiles/fh-10b-dungeon.webp",
+    "size": {
+      "width": 849,
+      "height": 743
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "10C",
+    "path": "/tiles/fh-10c-metal.webp",
+    "size": {
+      "width": 849,
+      "height": 743
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "10D",
+    "path": "/tiles/fh-10d-snow.webp",
+    "size": {
+      "width": 849,
+      "height": 742
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "11A",
+    "path": "/tiles/fh-11a-snow.webp",
+    "size": {
+      "width": 1216,
+      "height": 966
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "11B",
+    "path": "/tiles/fh-11b-cave.webp",
+    "size": {
+      "width": 1251,
+      "height": 977
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "11C",
+    "path": "/tiles/fh-11c-snow.webp",
+    "size": {
+      "width": 1216,
+      "height": 966
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "11D",
+    "path": "/tiles/fh-11d-cave.webp",
+    "size": {
+      "width": 1251,
+      "height": 977
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "11E",
+    "path": "/tiles/fh-11e-dungeon.webp",
+    "size": {
+      "width": 1216,
+      "height": 965
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "11F",
+    "path": "/tiles/fh-11f-metal.webp",
+    "size": {
+      "width": 1251,
+      "height": 977
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "12A",
+    "path": "/tiles/fh-12a-metal.webp",
+    "size": {
+      "width": 1225,
+      "height": 857
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "12B",
+    "path": "/tiles/fh-12b-cave.webp",
+    "size": {
+      "width": 1225,
+      "height": 857
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "12C",
+    "path": "/tiles/fh-12c-metal.webp",
+    "size": {
+      "width": 1225,
+      "height": 857
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "12D",
+    "path": "/tiles/fh-12d-dungeon.webp",
+    "size": {
+      "width": 1225,
+      "height": 857
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "13A",
+    "path": "/tiles/fh-13a-snow.webp",
+    "size": {
+      "width": 718,
+      "height": 993
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "13B",
+    "path": "/tiles/fh-13b-cave.webp",
+    "size": {
+      "width": 739,
+      "height": 993
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "13C",
+    "path": "/tiles/fh-13c-snow.webp",
+    "size": {
+      "width": 739,
+      "height": 993
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "13D",
+    "path": "/tiles/fh-13d-cave.webp",
+    "size": {
+      "width": 739,
+      "height": 993
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "13E",
+    "path": "/tiles/fh-13e-dungeon.webp",
+    "size": {
+      "width": 739,
+      "height": 993
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "13F",
+    "path": "/tiles/fh-13f-metal.webp",
+    "size": {
+      "width": 739,
+      "height": 993
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "14A",
+    "path": "/tiles/fh-14a-wood.webp",
+    "size": {
+      "width": 717,
+      "height": 1202
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "14B",
+    "path": "/tiles/fh-14b-cave.webp",
+    "size": {
+      "width": 716,
+      "height": 1201
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "15A",
+    "path": "/tiles/fh-15a-snow.webp",
+    "size": {
+      "width": 823,
+      "height": 997
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "15B",
+    "path": "/tiles/fh-15b-cave.webp",
+    "size": {
+      "width": 823,
+      "height": 997
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "15C",
+    "path": "/tiles/fh-15c-dungeon.webp",
+    "size": {
+      "width": 823,
+      "height": 997
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "15D",
+    "path": "/tiles/fh-15d-metal.webp",
+    "size": {
+      "width": 823,
+      "height": 997
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "16A",
+    "path": "/tiles/fh-16a-snow.webp",
+    "size": {
+      "width": 1114,
+      "height": 972
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "16B",
+    "path": "/tiles/fh-16b-cave.webp",
+    "size": {
+      "width": 1114,
+      "height": 972
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "16C",
+    "path": "/tiles/fh-16c-dungeon.webp",
+    "size": {
+      "width": 1114,
+      "height": 972
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
+  },
+  {
+    "id": "16D",
+    "path": "/tiles/fh-16d-metal.webp",
+    "size": {
+      "width": 1114,
+      "height": 972
+    },
+    "padding": {
+      "x": 0,
+      "y": 0
+    },
+    "hexes": [],
+    "doors": []
   }
 ]
