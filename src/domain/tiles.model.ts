@@ -1,16 +1,16 @@
 export interface Hex {
-  x: number;
-  y: number;
+	x: number;
+	y: number;
 }
 
 export interface Tile {
-  id: string;
-  path: string;
-  size: {
-    width: number;
-    height: number;
-  };
-  padding: Hex;
-  rotation?: number;
-  hexes: Hex[];
+	id: string;
+	path: string;
+	size: {
+		width: number;
+		height: number;
+	};
+	padding: Hex;
+	rotation?: number;
+	hexes: Hex[];
 }

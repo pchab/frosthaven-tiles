@@ -1,7 +1,7 @@
-import type { Hex } from './tiles.model';
+import type { Hex } from "./tiles.model";
 
 export interface Standee {
-  id: string;
-  position: Hex;
-  type: 'player' | 'monster' | 'loot';
+	id: string;
+	position: Hex;
+	type: "player" | "monster" | "loot";
 }
