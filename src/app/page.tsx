@@ -1,23 +1,47 @@
-import Heading from "@/app/_components/layout/Heading";
-import Image from "next/image";
-import TileComponent from "./_components/tiles/Tile";
-import allTiles from "@/domain/tiles";
+"use client";
 
-export default function MainPage() {
+import React, { useState } from "react";
+import { Board } from "./_components/Board";
+import { TilePalette } from "./_components/TilePalette";
+import { FigurePalette } from "./_components/FigurePalette";
+import type { BoardState } from "../domain/board.model";
+
+export default function Home() {
+	const [boardState, setBoardState] = useState<BoardState>({
+		tiles: [],
+		figures: [],
+	});
+
+	// Load from LocalStorage on mount
+	React.useEffect(() => {
+		const saved = localStorage.getItem("frosthaven-board-state");
+		if (saved) {
+			try {
+				setBoardState(JSON.parse(saved));
+			} catch (e) {
+				console.error("Failed to parse board state", e);
+			}
+		}
+	}, []);
+
+	// Save to LocalStorage on change
+	React.useEffect(() => {
+		localStorage.setItem("frosthaven-board-state", JSON.stringify(boardState));
+	}, [boardState]);
+
 	return (
-		<div className="flex flex-col gap-16 p-16 place-items-center">
-			<Image
-				role="banner"
-				priority
-				loading="eager"
-				src="/fh-frosthaven-logo.webp"
-				alt="Frosthaven logo"
-				width={600}
-				height={87}
-			/>
-			<Heading title="Select a scenario" />
-
-			<TileComponent tile={allTiles[0]} />
-		</div>
+		<main className="flex h-screen w-screen overflow-hidden bg-black relative">
+			<a
+				href="/editor"
+				className="absolute top-2 right-2 z-50 text-white bg-slate-800 px-2 py-1 rounded text-xs hover:bg-slate-700"
+			>
+				Tile Editor
+			</a>
+			<TilePalette />
+			<div className="flex-1 relative">
+				<Board boardState={boardState} onUpdateBoard={setBoardState} />
+			</div>
+			<FigurePalette />
+		</main>
 	);
 }

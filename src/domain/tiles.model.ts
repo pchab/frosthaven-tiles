@@ -13,4 +13,8 @@ export interface Tile {
 	padding: Hex;
 	rotation?: number;
 	hexes: Hex[];
+	doors?: Hex[];
+	debugScale?: {
+		width: number;
+	};
 }
