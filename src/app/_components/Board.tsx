@@ -77,6 +77,105 @@ function getDoorPositions(
 	});
 }
 
+const FIGURE_SNAP_THRESHOLD = 100; // pixels - larger threshold for figures
+
+// Get absolute pixel position of a hex on a placed tile
+function getAbsoluteHexPosition(
+	hex: { x: number; y: number },
+	placedTile: PlacedTile,
+	tileDef: {
+		size: { width: number; height: number };
+		padding: { x: number; y: number };
+		debugScale?: { width: number };
+	},
+): { x: number; y: number } {
+	const hexWidth = tileDef.debugScale?.width || DEFAULT_HEX_WIDTH;
+	const hexHeight = hexWidth * (2 / Math.sqrt(3));
+	const tileCenter = {
+		x: tileDef.size.width / 2,
+		y: tileDef.size.height / 2,
+	};
+
+	// Get hex position relative to tile (this gives top-left corner)
+	const localPos = getHexPixel(hex.x, hex.y, hexWidth, tileDef.padding);
+
+	// Adjust to get the center of the hex
+	const hexCenter = {
+		x: localPos.x + hexWidth / 2,
+		y: localPos.y + hexHeight / 2,
+	};
+
+	// Apply rotation around tile center
+	const rotatedPos = rotatePoint(hexCenter, tileCenter, placedTile.rotation);
+
+	// Convert to absolute board coordinates
+	return {
+		x: placedTile.x + rotatedPos.x,
+		y: placedTile.y + rotatedPos.y,
+	};
+}
+
+// Find which tile contains a given position
+function findTileUnderPosition(
+	x: number,
+	y: number,
+	tiles: PlacedTile[],
+	allTilesDefs: typeof allTiles,
+): { tile: PlacedTile; tileDef: typeof allTiles[0] } | null {
+	// Check tiles in reverse order (top to bottom in z-order)
+	for (let i = tiles.length - 1; i >= 0; i--) {
+		const tile = tiles[i];
+		const tileDef = allTilesDefs.find((t) => t.id === tile.tileId);
+		if (!tileDef) continue;
+
+		// Simple bounding box check (doesn't account for rotation perfectly, but good enough)
+		const inBounds =
+			x >= tile.x &&
+			x <= tile.x + tileDef.size.width &&
+			y >= tile.y &&
+			y <= tile.y + tileDef.size.height;
+
+		if (inBounds) {
+			return { tile, tileDef };
+		}
+	}
+	return null;
+}
+
+// Find the nearest hex on a tile to a given position
+function findNearestHexOnTile(
+	position: { x: number; y: number },
+	placedTile: PlacedTile,
+	tileDef: {
+		hexes: { x: number; y: number }[];
+		size: { width: number; height: number };
+		padding: { x: number; y: number };
+		debugScale?: { width: number };
+	},
+): { hex: { x: number; y: number }; position: { x: number; y: number } } | null {
+	if (!tileDef.hexes || tileDef.hexes.length === 0) return null;
+
+	let nearestHex: { x: number; y: number } | null = null;
+	let nearestPos: { x: number; y: number } | null = null;
+	let minDistance = Number.POSITIVE_INFINITY;
+
+	for (const hex of tileDef.hexes) {
+		const hexPos = getAbsoluteHexPosition(hex, placedTile, tileDef);
+		const distance = Math.hypot(position.x - hexPos.x, position.y - hexPos.y);
+
+		if (distance < minDistance) {
+			minDistance = distance;
+			nearestHex = hex;
+			nearestPos = hexPos;
+		}
+	}
+
+	if (nearestHex && nearestPos) {
+		return { hex: nearestHex, position: nearestPos };
+	}
+	return null;
+}
+
 
 export function Board({ boardState, onUpdateBoard }: BoardProps) {
 	const [draggingId, setDraggingId] = useState<string | null>(null);
@@ -209,6 +308,52 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 						onUpdateBoard({ ...boardState, tiles: updatedTiles });
 						setDraggingId(null);
 						return;
+					}
+				}
+			}
+
+			// Check if we're dragging a figure and apply hex snapping
+			const draggedFigure = boardState.figures.find((f) => f.id === draggingId);
+			if (draggedFigure) {
+				// Find which tile the figure is on (use center of figure)
+				const figureCenterX = draggedFigure.x + 16; // 32x32 figure, center at +16
+				const figureCenterY = draggedFigure.y + 16;
+
+				const tileUnder = findTileUnderPosition(
+					figureCenterX,
+					figureCenterY,
+					boardState.tiles,
+					allTiles,
+				);
+
+				if (tileUnder) {
+					const nearestHex = findNearestHexOnTile(
+						{ x: figureCenterX, y: figureCenterY },
+						tileUnder.tile,
+						tileUnder.tileDef,
+					);
+
+					if (nearestHex) {
+						const distance = Math.hypot(
+							figureCenterX - nearestHex.position.x,
+							figureCenterY - nearestHex.position.y,
+						);
+
+						if (distance < FIGURE_SNAP_THRESHOLD) {
+							// Snap to hex center (subtract half figure size to center it)
+							const updatedFigures = boardState.figures.map((fig) =>
+								fig.id === draggingId
+									? {
+										...fig,
+										x: nearestHex.position.x - 16,
+										y: nearestHex.position.y - 16,
+									}
+									: fig,
+							);
+							onUpdateBoard({ ...boardState, figures: updatedFigures });
+							setDraggingId(null);
+							return;
+						}
 					}
 				}
 			}
