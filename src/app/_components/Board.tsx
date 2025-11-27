@@ -57,17 +57,24 @@ function getDoorPositions(
 	if (!tileDef.doors || tileDef.doors.length === 0) return [];
 
 	const hexWidth = tileDef.debugScale?.width || DEFAULT_HEX_WIDTH;
+	const hexHeight = hexWidth * (2 / Math.sqrt(3));
 	const tileCenter = {
 		x: tileDef.size.width / 2,
 		y: tileDef.size.height / 2,
 	};
 
 	return tileDef.doors.map((door) => {
-		// Get hex position relative to tile
+		// Get hex position relative to tile (top-left corner)
 		const localPos = getHexPixel(door.x, door.y, hexWidth, tileDef.padding);
 
+		// Adjust to get the center of the hex
+		const hexCenter = {
+			x: localPos.x + hexWidth / 2,
+			y: localPos.y + hexHeight / 2,
+		};
+
 		// Apply rotation around tile center
-		const rotatedPos = rotatePoint(localPos, tileCenter, placedTile.rotation);
+		const rotatedPos = rotatePoint(hexCenter, tileCenter, placedTile.rotation);
 
 		// Convert to absolute board coordinates
 		return {
@@ -316,8 +323,8 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 			const draggedFigure = boardState.figures.find((f) => f.id === draggingId);
 			if (draggedFigure) {
 				// Find which tile the figure is on (use center of figure)
-				const figureCenterX = draggedFigure.x + 16; // 32x32 figure, center at +16
-				const figureCenterY = draggedFigure.y + 16;
+				const figureCenterX = draggedFigure.x + 36; // 72x72 figure, center at +36
+				const figureCenterY = draggedFigure.y + 36;
 
 				const tileUnder = findTileUnderPosition(
 					figureCenterX,
@@ -345,8 +352,8 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 								fig.id === draggingId
 									? {
 										...fig,
-										x: nearestHex.position.x - 16,
-										y: nearestHex.position.y - 16,
+										x: nearestHex.position.x - 36,
+										y: nearestHex.position.y - 36,
 									}
 									: fig,
 							);
@@ -435,8 +442,8 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 					id: crypto.randomUUID(),
 					name: figureDef.name,
 					type: figureDef.type,
-					x: boardPos.x - 16, // Center 32x32
-					y: boardPos.y - 16,
+					x: boardPos.x - 36, // Center 72x72
+					y: boardPos.y - 36,
 				};
 
 				onUpdateBoard({
@@ -547,21 +554,149 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 					);
 				})}
 
-				{boardState.figures.map((fig) => (
-					<div
-						key={fig.id}
-						className="absolute cursor-move select-none z-10 w-8 h-8 rounded-full bg-white border-2 border-black flex items-center justify-center text-xs font-bold shadow-lg"
-						style={{
-							left: fig.x,
-							top: fig.y,
-						}}
-						onMouseDown={(e) =>
-							handleMouseDown(e, fig.id, "figure", fig.x, fig.y)
-						}
-					>
-						{fig.name[0]?.toUpperCase()}
-					</div>
-				))}
+				{boardState.figures.map((fig) => {
+					const figureDef = allFigures.find((f) => f.id === fig.type || f.name === fig.name);
+					const isMonster = fig.type === "monster";
+
+					// Extract color from Tailwind class (e.g., "bg-blue-500" -> "blue")
+					const colorMatch = figureDef?.color.match(/bg-(\w+)-(\d+)/);
+					const colorName = colorMatch?.[1] || "gray";
+					const colorShade = colorMatch?.[2] || "500";
+
+					// Map Tailwind colors to CSS colors
+					const colorMap: Record<string, string> = {
+						blue: "#3b82f6",
+						green: "#22c55e",
+						purple: "#a855f7",
+						yellow: "#eab308",
+						red: "#ef4444",
+						gray: "#6b7280",
+					};
+
+					const baseColor = colorMap[colorName] || colorMap.gray;
+
+					return (
+						<div
+							key={fig.id}
+							className="absolute cursor-move select-none z-10"
+							style={{
+								left: fig.x,
+								top: fig.y,
+								width: "72px",
+								height: "72px",
+							}}
+							onMouseDown={(e) =>
+								handleMouseDown(e, fig.id, "figure", fig.x, fig.y)
+							}
+						>
+							{figureDef?.imagePath ? (
+								// Render image if available
+								<div className="w-full h-full relative drop-shadow-xl filter hover:brightness-110 transition-all group">
+									<img
+										src={figureDef.imagePath}
+										alt={fig.name}
+										className="w-full h-full object-contain"
+										draggable={false}
+									/>
+									{/* Tooltip on hover */}
+									<div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+										{fig.name}
+									</div>
+								</div>
+							) : isMonster ? (
+								// Monster: Hexagonal shape with red border and 3D effect
+								<svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl filter hover:brightness-110 transition-all">
+									<defs>
+										<linearGradient id={`grad-${fig.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+											<stop offset="0%" style={{ stopColor: baseColor, stopOpacity: 1 }} />
+											<stop offset="100%" style={{ stopColor: "#1f2937", stopOpacity: 0.8 }} />
+										</linearGradient>
+										<filter id="inner-shadow">
+											<feOffset dx="0" dy="2" />
+											<feGaussianBlur stdDeviation="2" result="offset-blur" />
+											<feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse" />
+											<feFlood floodColor="black" floodOpacity="0.5" result="color" />
+											<feComposite operator="in" in="color" in2="inverse" result="shadow" />
+											<feComposite operator="over" in="shadow" in2="SourceGraphic" />
+										</filter>
+									</defs>
+									{/* Outer border/shadow */}
+									<polygon
+										points="50,2 93,26 93,74 50,98 7,74 7,26"
+										fill="#dc2626"
+										stroke="none"
+									/>
+									{/* Main body */}
+									<polygon
+										points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+										fill={`url(#grad-${fig.id})`}
+										stroke="white"
+										strokeWidth="2"
+									/>
+									<text
+										x="50"
+										y="52"
+										dominantBaseline="middle"
+										textAnchor="middle"
+										fill="white"
+										fontSize="36"
+										fontWeight="900"
+										style={{
+											textShadow: "2px 2px 0px rgba(0,0,0,0.8)",
+											fontFamily: "serif"
+										}}
+									>
+										{fig.name[0]?.toUpperCase()}
+									</text>
+								</svg>
+							) : (
+								// Player fallback (if no image): Circular shape
+								<svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl filter hover:brightness-110 transition-all">
+									<defs>
+										<radialGradient id={`grad-${fig.id}`} cx="30%" cy="30%" r="70%">
+											<stop offset="0%" style={{ stopColor: baseColor, stopOpacity: 1 }} />
+											<stop offset="100%" style={{ stopColor: "#1e3a8a", stopOpacity: 1 }} />
+										</radialGradient>
+									</defs>
+									{/* Outer ring */}
+									<circle
+										cx="50"
+										cy="50"
+										r="48"
+										fill="#2563eb"
+									/>
+									{/* Main body */}
+									<circle
+										cx="50"
+										cy="50"
+										r="44"
+										fill={`url(#grad-${fig.id})`}
+										stroke="white"
+										strokeWidth="2"
+									/>
+									{/* Shine effect */}
+									<ellipse cx="35" cy="35" rx="15" ry="10" fill="white" fillOpacity="0.2" transform="rotate(-45, 35, 35)" />
+
+									<text
+										x="50"
+										y="52"
+										dominantBaseline="middle"
+										textAnchor="middle"
+										fill="white"
+										fontSize="36"
+										fontWeight="900"
+										style={{
+											textShadow: "2px 2px 0px rgba(0,0,0,0.8)",
+											fontFamily: "serif"
+										}}
+									>
+										{fig.name[0]?.toUpperCase()}
+									</text>
+								</svg>
+							)}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);
