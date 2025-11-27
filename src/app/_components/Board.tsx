@@ -83,6 +83,53 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 	const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 	const boardRef = useRef<HTMLDivElement>(null);
 
+	// Pan and zoom state
+	const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+	const [zoom, setZoom] = useState(1.0);
+	const [isPanning, setIsPanning] = useState(false);
+	const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+	const [spacePressed, setSpacePressed] = useState(false);
+
+	// Coordinate transformation helpers
+	const screenToBoard = (screenX: number, screenY: number) => {
+		const rect = boardRef.current?.getBoundingClientRect();
+		if (!rect) return { x: screenX, y: screenY };
+
+		const x = (screenX - rect.left - panOffset.x) / zoom;
+		const y = (screenY - rect.top - panOffset.y) / zoom;
+		return { x, y };
+	};
+
+	const boardToScreen = (boardX: number, boardY: number) => {
+		const rect = boardRef.current?.getBoundingClientRect();
+		if (!rect) return { x: boardX, y: boardY };
+
+		const x = boardX * zoom + panOffset.x + rect.left;
+		const y = boardY * zoom + panOffset.y + rect.top;
+		return { x, y };
+	};
+
+	// Handle space key for panning
+	React.useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.code === "Space" && !spacePressed) {
+				setSpacePressed(true);
+			}
+		};
+		const handleKeyUp = (e: KeyboardEvent) => {
+			if (e.code === "Space") {
+				setSpacePressed(false);
+				setIsPanning(false);
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		window.addEventListener("keyup", handleKeyUp);
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+			window.removeEventListener("keyup", handleKeyUp);
+		};
+	}, [spacePressed]);
+
 	const handleMouseDown = (
 		e: React.MouseEvent,
 		id: string,
@@ -90,16 +137,35 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 		initialX: number,
 		initialY: number,
 	) => {
+		// Check if we should pan instead of drag
+		if (e.button === 1 || (e.button === 0 && spacePressed)) {
+			// Let the board handle panning
+			return;
+		}
+
 		e.stopPropagation();
 		setDraggingId(id);
-		setDragOffset({ x: e.clientX - initialX, y: e.clientY - initialY });
+		const boardPos = screenToBoard(e.clientX, e.clientY);
+		setDragOffset({ x: boardPos.x - initialX, y: boardPos.y - initialY });
 	};
 
 	const handleMouseMove = (e: React.MouseEvent) => {
+		if (isPanning) {
+			const dx = e.clientX - panStart.x;
+			const dy = e.clientY - panStart.y;
+			setPanOffset({
+				x: panOffset.x + dx,
+				y: panOffset.y + dy,
+			});
+			setPanStart({ x: e.clientX, y: e.clientY });
+			return;
+		}
+
 		if (!draggingId || !boardRef.current) return;
 
-		const newX = e.clientX - dragOffset.x;
-		const newY = e.clientY - dragOffset.y;
+		const boardPos = screenToBoard(e.clientX, e.clientY);
+		const newX = boardPos.x - dragOffset.x;
+		const newY = boardPos.y - dragOffset.y;
 
 		// Update tile position
 		const updatedTiles = boardState.tiles.map((tile) => {
@@ -125,6 +191,8 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 	};
 
 	const handleMouseUp = () => {
+		setIsPanning(false);
+
 		if (draggingId) {
 			// Check if we're dragging a tile and apply door snapping
 			const draggedTile = boardState.tiles.find((t) => t.id === draggingId);
@@ -198,9 +266,7 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 		const tileId = e.dataTransfer.getData("tileId");
 		const figureId = e.dataTransfer.getData("figureId");
 
-		const rect = boardRef.current?.getBoundingClientRect();
-		const x = e.clientX - (rect?.left || 0);
-		const y = e.clientY - (rect?.top || 0);
+		const boardPos = screenToBoard(e.clientX, e.clientY);
 
 		if (tileId) {
 			const tileDef = allTiles.find((t) => t.id === tileId);
@@ -208,8 +274,8 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 				const newTile: PlacedTile = {
 					id: crypto.randomUUID(),
 					tileId: tileDef.id,
-					x: x - tileDef.size.width / 2, // Center it
-					y: y - tileDef.size.height / 2,
+					x: boardPos.x - tileDef.size.width / 2, // Center it
+					y: boardPos.y - tileDef.size.height / 2,
 					rotation: 0,
 				};
 				onUpdateBoard({
@@ -224,8 +290,8 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 					id: crypto.randomUUID(),
 					name: figureDef.name,
 					type: figureDef.type,
-					x: x - 16, // Center 32x32
-					y: y - 16,
+					x: boardPos.x - 16, // Center 32x32
+					y: boardPos.y - 16,
 				};
 
 				onUpdateBoard({
@@ -251,63 +317,107 @@ export function Board({ boardState, onUpdateBoard }: BoardProps) {
 		onUpdateBoard({ ...boardState, tiles: updatedTiles });
 	};
 
+	const handleWheel = (e: React.WheelEvent) => {
+		e.preventDefault();
+
+		const rect = boardRef.current?.getBoundingClientRect();
+		if (!rect) return;
+
+		// Get mouse position relative to board
+		const mouseX = e.clientX - rect.left;
+		const mouseY = e.clientY - rect.top;
+
+		// Calculate zoom change (5% per step for smoother zooming)
+		const zoomDelta = e.deltaY > 0 ? 0.95 : 1.05;
+		const newZoom = Math.min(Math.max(zoom * zoomDelta, 0.1), 3.0);
+
+		// Adjust pan to zoom towards cursor
+		const scale = newZoom / zoom;
+		const newPanX = mouseX - (mouseX - panOffset.x) * scale;
+		const newPanY = mouseY - (mouseY - panOffset.y) * scale;
+
+		setZoom(newZoom);
+		setPanOffset({ x: newPanX, y: newPanY });
+	};
+
+	const handleBoardMouseDown = (e: React.MouseEvent) => {
+		// Middle mouse button or space + left mouse button
+		if (e.button === 1 || (e.button === 0 && spacePressed)) {
+			e.preventDefault();
+			setIsPanning(true);
+			setPanStart({ x: e.clientX, y: e.clientY });
+		}
+	};
+
 	return (
 		<div
 			ref={boardRef}
 			className="relative w-full h-full bg-slate-800 overflow-hidden"
+			style={{ cursor: isPanning || spacePressed ? "grab" : "default" }}
 			onMouseMove={handleMouseMove}
 			onMouseUp={handleMouseUp}
+			onMouseDown={handleBoardMouseDown}
+			onWheel={handleWheel}
 			onDrop={handleDrop}
 			onDragOver={handleDragOver}
 		>
-			{boardState.tiles.map((placedTile) => {
-				const tileDef = allTiles.find((t) => t.id === placedTile.tileId);
-				if (!tileDef) return null;
+			<div
+				style={{
+					transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoom})`,
+					transformOrigin: "0 0",
+					width: "100%",
+					height: "100%",
+				}}
+			>
+				{boardState.tiles.map((placedTile) => {
+					const tileDef = allTiles.find((t) => t.id === placedTile.tileId);
+					if (!tileDef) return null;
 
-				return (
+					return (
+						<div
+							key={placedTile.id}
+							className="absolute cursor-move select-none"
+							style={{
+								left: placedTile.x,
+								top: placedTile.y,
+								width: tileDef.size.width,
+								height: tileDef.size.height,
+								transform: `rotate(${placedTile.rotation}deg)`,
+								backgroundImage: `url(${tileDef.path})`,
+								backgroundSize: "contain",
+								backgroundRepeat: "no-repeat",
+								zIndex: 1,
+							}}
+							onMouseDown={(e) =>
+								handleMouseDown(
+									e,
+									placedTile.id,
+									"tile",
+									placedTile.x,
+									placedTile.y,
+								)
+							}
+							onDoubleClick={(e) => handleTileDoubleClick(e, placedTile.id)}
+						/>
+					);
+				})}
+
+				{boardState.figures.map((fig) => (
 					<div
-						key={placedTile.id}
-						className="absolute cursor-move select-none"
+						key={fig.id}
+						className="absolute cursor-move select-none z-10 w-8 h-8 rounded-full bg-white border-2 border-black flex items-center justify-center text-xs font-bold shadow-lg"
 						style={{
-							left: placedTile.x,
-							top: placedTile.y,
-							width: tileDef.size.width,
-							height: tileDef.size.height,
-							transform: `rotate(${placedTile.rotation}deg)`,
-							backgroundImage: `url(${tileDef.path})`,
-							backgroundSize: "contain",
-							backgroundRepeat: "no-repeat",
-							zIndex: 1,
+							left: fig.x,
+							top: fig.y,
 						}}
 						onMouseDown={(e) =>
-							handleMouseDown(
-								e,
-								placedTile.id,
-								"tile",
-								placedTile.x,
-								placedTile.y,
-							)
+							handleMouseDown(e, fig.id, "figure", fig.x, fig.y)
 						}
-						onDoubleClick={(e) => handleTileDoubleClick(e, placedTile.id)}
-					/>
-				);
-			})}
-
-			{boardState.figures.map((fig) => (
-				<div
-					key={fig.id}
-					className="absolute cursor-move select-none z-10 w-8 h-8 rounded-full bg-white border-2 border-black flex items-center justify-center text-xs font-bold shadow-lg"
-					style={{
-						left: fig.x,
-						top: fig.y,
-					}}
-					onMouseDown={(e) =>
-						handleMouseDown(e, fig.id, "figure", fig.x, fig.y)
-					}
-				>
-					{fig.name[0]?.toUpperCase()}
-				</div>
-			))}
+					>
+						{fig.name[0]?.toUpperCase()}
+					</div>
+				))}
+			</div>
 		</div>
 	);
 }
